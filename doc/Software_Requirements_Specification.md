@@ -98,7 +98,7 @@ The website is a public-facing marketing site for Zyphr Innovation & Technology.
 | SSL | AWS ACM | HTTPS certificate for zyphr.co.in |
 | Contact API | AWS Lambda (Node.js) | Process contact form submissions |
 | Email | AWS SES | Send form submission emails to Zyphr |
-| DNS | AWS Route 53 (or existing provider) | Domain resolution for zyphr.co.in |
+| DNS | GoDaddy (domain registrar) | Domain resolution for zyphr.co.in (CNAME/A records pointing to CloudFront) |
 | Analytics | Google Analytics 4 | Traffic and user behavior tracking |
 | Image Optimization | Next.js Image + CloudFront | WebP/AVIF delivery, responsive images |
 
@@ -141,7 +141,7 @@ The website is a public-facing marketing site for Zyphr Innovation & Technology.
 | **AWS S3** | Static asset hosting (SSG output) |
 | **AWS CloudFront** | CDN, edge caching, SSL termination |
 | **AWS ACM** | SSL/TLS certificate management |
-| **AWS Route 53** | DNS management (if applicable) |
+| **GoDaddy DNS** | Domain DNS management (CNAME/A records to CloudFront) |
 
 ### 3.5 Development Tools
 
@@ -448,7 +448,7 @@ The website is a public-facing marketing site for Zyphr Innovation & Technology.
 | **S3** | Private bucket, static website hosting via CloudFront |
 | **CloudFront** | Distribution with custom domain (zyphr.co.in), SSL via ACM, edge caching |
 | **ACM** | SSL/TLS certificate for zyphr.co.in and www.zyphr.co.in |
-| **Route 53** | DNS A/AAAA records pointing to CloudFront (if DNS managed by AWS) |
+| **GoDaddy DNS** | CNAME record pointing zyphr.co.in to CloudFront distribution domain. A record flattening or CNAME for www subdomain |
 | **Lambda** | Node.js 20 runtime, 128-256 MB memory, 10s timeout |
 | **API Gateway** | HTTP API with POST endpoint for contact form |
 | **SES** | Verified sender domain (zyphr.co.in), email delivery for contact submissions |
@@ -560,7 +560,7 @@ feature/xyz  →  develop  →  main (production)
 
 | # | Assumption |
 |---|-----------|
-| 1 | The zyphr.co.in domain is registered and DNS is accessible |
+| 1 | The zyphr.co.in domain is registered with GoDaddy and DNS management is accessible |
 | 2 | An AWS account is available with necessary service access |
 | 3 | AWS SES sender domain verification will be completed before launch |
 | 4 | Leadership team photos and bios will be provided separately |
