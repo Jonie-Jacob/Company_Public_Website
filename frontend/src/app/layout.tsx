@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
+import Navbar from "@/components/layout/Navbar";
 import PageTransition from "@/components/layout/PageTransition";
 import "./globals.css";
 
@@ -39,7 +40,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <PageTransition>{children}</PageTransition>
+        <Navbar />
+        <main className="flex-1 pt-[72px]">
+          <PageTransition>{children}</PageTransition>
+        </main>
       </body>
     </html>
   );
