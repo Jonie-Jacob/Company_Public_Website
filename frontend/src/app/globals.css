@@ -1,26 +1,150 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ── Brand Design Tokens ── */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Brand Colors */
+  --color-purple: #6A0DAD;
+  --color-purple-light: #8B3FC7;
+  --color-purple-dark: #4A0080;
+  --color-ceylon-blue: #0047AB;
+  --color-ceylon-blue-light: #1A6FD5;
+  --color-ceylon-blue-dark: #003380;
+  --color-champagne: #F7E7CE;
+  --color-champagne-light: #FDF5E8;
+  --color-champagne-dark: #E8D2AD;
+  --color-charcoal: #1A1A2E;
+  --color-near-black: #0F0F1A;
+
+  /* Neutral shades for text / surfaces */
+  --color-surface: #13132A;
+  --color-surface-light: #1E1E3A;
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-light: rgba(255, 255, 255, 0.14);
+  --color-text-primary: #F0F0F5;
+  --color-text-secondary: #A0A0B8;
+  --color-text-muted: #6A6A80;
+
+  /* Typography */
+  --font-heading: var(--font-poppins);
+  --font-body: var(--font-inter);
+
+  /* Transitions */
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-index layers */
+  --z-cursor: 9999;
+  --z-modal: 100;
+  --z-navbar: 50;
+  --z-cookie: 90;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Base Styles (dark‑mode‑first) ── */
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-near-black);
+  color: var(--color-text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Custom Scrollbar ── */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-near-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-purple);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-purple-light);
+}
+
+/* Firefox */
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-color: var(--color-purple) var(--color-near-black);
+    scrollbar-width: thin;
+  }
+}
+
+/* ── Selection ── */
+
+::selection {
+  background-color: var(--color-purple);
+  color: var(--color-champagne-light);
+}
+
+/* ── Gradient Utilities ── */
+
+.gradient-brand {
+  background: linear-gradient(135deg, var(--color-purple) 0%, var(--color-ceylon-blue) 100%);
+}
+
+.gradient-brand-diagonal {
+  background: linear-gradient(
+    160deg,
+    var(--color-near-black) 0%,
+    var(--color-charcoal) 30%,
+    var(--color-purple-dark) 70%,
+    var(--color-ceylon-blue-dark) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-champagne) 0%, var(--color-purple-light) 50%, var(--color-ceylon-blue-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ── Glassmorphism ── */
+
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.glass-hover {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transition: background 0.3s var(--ease-smooth), border-color 0.3s var(--ease-smooth),
+    box-shadow 0.3s var(--ease-smooth);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 40px rgba(106, 13, 173, 0.15);
+}
+
+/* ── Focus Ring ── */
+
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.2s var(--ease-smooth);
+}
+
+.focus-ring:focus-visible {
+  outline-color: var(--color-purple-light);
 }
