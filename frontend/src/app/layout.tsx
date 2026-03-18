@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 import "./globals.css";
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <main className="flex-1 pt-[72px]">
           <PageTransition>{children}</PageTransition>
         </main>
+        <Footer />
       </body>
     </html>
   );
