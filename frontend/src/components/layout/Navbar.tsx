@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
@@ -36,8 +37,16 @@ export default function Navbar() {
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2 focus-ring rounded-lg">
-            <span className="gradient-text-bright text-2xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
+          <Link href="/" className="group flex items-center gap-2.5 focus-ring rounded-lg">
+            <Image
+              src="/images/logo.png"
+              alt="Zyphr logo"
+              width={36}
+              height={36}
+              className="object-contain drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] transition-all duration-300 group-hover:drop-shadow-[0_0_14px_rgba(168,85,247,0.5)]"
+              priority
+            />
+            <span className="gradient-text-bright text-xl font-bold font-[family-name:var(--font-heading)] tracking-tight">
               Zyphr
             </span>
           </Link>

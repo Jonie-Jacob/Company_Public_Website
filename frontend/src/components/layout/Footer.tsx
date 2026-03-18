@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { NAV_LINKS, SOCIAL_LINKS, SERVICES, COMPANY } from "@/lib/constants";
 
@@ -36,7 +37,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           {/* Brand Column */}
           <div className="flex flex-col gap-4 lg:col-span-1">
-            <Link href="/" className="inline-block">
+            <Link href="/" className="inline-flex items-center gap-2.5 group">
+              <Image
+                src="/images/logo.png"
+                alt="Zyphr logo"
+                width={40}
+                height={40}
+                className="object-contain drop-shadow-[0_0_8px_rgba(168,85,247,0.3)] transition-all duration-300 group-hover:drop-shadow-[0_0_16px_rgba(168,85,247,0.5)]"
+              />
               <motion.span
                 className="gradient-text-bright text-2xl font-bold font-[family-name:var(--font-heading)] tracking-tight"
                 whileHover={{
