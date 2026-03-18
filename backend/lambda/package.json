@@ -1,0 +1,17 @@
+{
+  "name": "zyphr-contact-form-handler",
+  "version": "1.0.0",
+  "description": "AWS Lambda function to handle Zyphr website contact form submissions via SES",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "test": "node test.mjs",
+    "package": "powershell -Command \"Compress-Archive -Path index.mjs,package.json -DestinationPath deployment-package.zip -Force\"",
+    "package-bash": "zip deployment-package.zip index.mjs package.json"
+  },
+  "author": "Zyphr Innovation & Technology",
+  "license": "PRIVATE",
+  "dependencies": {
+    "@aws-sdk/client-ses": "^3.1011.0"
+  }
+}
