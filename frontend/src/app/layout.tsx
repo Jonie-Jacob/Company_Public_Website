@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
+import PageTransition from "@/components/layout/PageTransition";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,9 +17,18 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Zyphr — Empowering Dreams. Engineering Reality.",
+  title: {
+    default: "Zyphr — Empowering Dreams. Engineering Reality.",
+    template: "%s | Zyphr",
+  },
   description:
     "Zyphr is a modern software company delivering web, mobile, cloud, and AI solutions that empower businesses to thrive in the digital age.",
+  metadataBase: new URL("https://zyphr.co.in"),
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    siteName: "Zyphr",
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +38,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <PageTransition>{children}</PageTransition>
+      </body>
     </html>
   );
 }
