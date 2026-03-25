@@ -46,10 +46,13 @@ export default function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 26, stiffness: 260 }}
-          className="fixed bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-md
-                     glass rounded-2xl p-5 z-[var(--z-cookie)]
-                     border border-white/10 shadow-lg shadow-purple/10"
+          style={{ position: "fixed", bottom: 24, left: 0, right: 0, zIndex: 90 }}
+          className="pointer-events-none flex justify-center px-4 md:justify-end md:px-6"
         >
+          <div
+            className="pointer-events-auto w-full max-w-md glass rounded-2xl p-5
+                       border border-white/10 shadow-lg shadow-purple/10"
+          >
           {/* ── Main banner ── */}
           {!showManage ? (
             <div className="space-y-3">
@@ -140,6 +143,7 @@ export default function CookieConsent() {
               </div>
             </div>
           )}
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
