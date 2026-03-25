@@ -52,6 +52,7 @@ export default function CookieConsent() {
           <div
             className="pointer-events-auto w-full max-w-md glass rounded-2xl p-5
                        border border-white/10 shadow-lg shadow-purple/10"
+            style={{ background: "rgba(15, 15, 26, 0.85)" }}
           >
           {/* ── Main banner ── */}
           {!showManage ? (
