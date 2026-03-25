@@ -28,11 +28,13 @@ export default function CookieConsent() {
     localStorage.setItem(CONSENT_KEY, "accepted" satisfies ConsentState);
     setVisible(false);
     loadGA();
+    window.dispatchEvent(new Event("cookie-consent-update"));
   }, []);
 
   const decline = useCallback(() => {
     localStorage.setItem(CONSENT_KEY, "declined" satisfies ConsentState);
     setVisible(false);
+    window.dispatchEvent(new Event("cookie-consent-update"));
   }, []);
 
   return (
