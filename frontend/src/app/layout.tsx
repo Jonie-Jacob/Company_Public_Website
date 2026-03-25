@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
+import CustomCursor from "@/components/cursor/CustomCursor";
 import "./globals.css";
 
 const inter = Inter({
@@ -41,6 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${poppins.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <CustomCursor />
         <Navbar />
         <main className="flex-1 pt-[72px]">
           <PageTransition>{children}</PageTransition>

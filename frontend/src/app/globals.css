@@ -234,3 +234,63 @@ body {
 .focus-ring:focus-visible {
   outline-color: var(--color-purple-light);
 }
+
+/* ── Custom Cursor ── */
+
+.custom-cursor-active,
+.custom-cursor-active * {
+  cursor: none !important;
+}
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--color-purple-light);
+  box-shadow: 0 0 12px var(--color-glow-purple);
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  transition: width 0.2s var(--ease-smooth), height 0.2s var(--ease-smooth),
+    margin 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth),
+    box-shadow 0.2s var(--ease-smooth);
+}
+
+.cursor-dot.cursor-hover {
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  background: var(--color-champagne);
+  box-shadow: 0 0 20px rgba(247, 231, 206, 0.5);
+}
+
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  margin-left: -18px;
+  margin-top: -18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(168, 85, 247, 0.35);
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  transition: width 0.25s var(--ease-smooth), height 0.25s var(--ease-smooth),
+    margin 0.25s var(--ease-smooth), border-color 0.25s var(--ease-smooth),
+    background 0.25s var(--ease-smooth);
+}
+
+.cursor-ring.cursor-hover {
+  width: 52px;
+  height: 52px;
+  margin-left: -26px;
+  margin-top: -26px;
+  border-color: rgba(247, 231, 206, 0.3);
+  background: rgba(168, 85, 247, 0.06);
+}
