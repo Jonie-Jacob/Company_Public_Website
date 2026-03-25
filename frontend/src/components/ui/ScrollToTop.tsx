@@ -22,7 +22,8 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 20 }}
           transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
-          className="fixed bottom-8 right-8 z-[var(--z-cookie)] glass-btn w-12 h-12 rounded-full flex items-center justify-center focus-ring shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:shadow-[0_0_30px_rgba(168,85,247,0.45)] transition-shadow"
+          style={{ position: "fixed", bottom: 32, right: 32, zIndex: 90 }}
+          className="glass-btn w-12 h-12 rounded-full flex items-center justify-center focus-ring shadow-[0_0_20px_rgba(168,85,247,0.25)] hover:shadow-[0_0_30px_rgba(168,85,247,0.45)] transition-shadow"
           aria-label="Scroll to top"
           data-cursor="pointer"
         >
