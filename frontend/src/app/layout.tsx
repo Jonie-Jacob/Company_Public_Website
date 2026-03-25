@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
 import CustomCursor from "@/components/cursor/CustomCursor";
 import ScrollToTop from "@/components/ui/ScrollToTop";
+import CookieConsent from "@/components/cookie/CookieConsent";
 import "./globals.css";
 
 const inter = Inter({
@@ -50,6 +51,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <ScrollToTop />
+        <CookieConsent />
       </body>
     </html>
   );
