@@ -294,3 +294,16 @@ body {
   border-color: rgba(247, 231, 206, 0.3);
   background: rgba(168, 85, 247, 0.06);
 }
+
+.cursor-trail {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--color-purple-light);
+  box-shadow: 0 0 8px var(--color-glow-purple);
+  z-index: calc(var(--z-cursor) - 1);
+  pointer-events: none;
+}
