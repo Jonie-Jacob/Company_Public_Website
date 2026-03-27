@@ -233,6 +233,45 @@ export const PROCESS_STEPS: ProcessStep[] = [
 
 // --- Company Values ---
 
+export const DIFFERENTIATORS: Value[] = [
+  {
+    title: "No Dream Too Small",
+    description:
+      "We treat every project — from a personal idea to an enterprise system — with equal passion and dedication.",
+    icon: "heart",
+  },
+  {
+    title: "Partners, Not Vendors",
+    description:
+      "We don't just deliver software; we walk beside you at every step of your journey.",
+    icon: "handshake",
+  },
+  {
+    title: "Innovation at Core",
+    description:
+      "From Agentic AI to cloud-native architectures, we leverage cutting-edge technology to future-proof your solutions.",
+    icon: "rocket",
+  },
+  {
+    title: "Complete Satisfaction",
+    description:
+      "Your vision realized exactly as you imagined — or better. We don't stop until you're delighted.",
+    icon: "check-circle",
+  },
+  {
+    title: "End-to-End Expertise",
+    description:
+      "From design to development to deployment and beyond — one team, one vision, one partner.",
+    icon: "layers",
+  },
+  {
+    title: "Lasting Impact",
+    description:
+      "We build solutions meant to endure — digital legacies, not disposable software.",
+    icon: "infinity",
+  },
+];
+
 export const VALUES: Value[] = [
   {
     title: "Brilliance",

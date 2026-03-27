@@ -12,7 +12,20 @@ export default function Navbar() {
   const pathname = usePathname();
   const scrollY = useScrollPosition();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const scrolled = scrollY > 60;
+  const [heroHeight, setHeroHeight] = useState(800);
+
+  // Get viewport height for scroll-linked opacity range
+  useEffect(() => {
+    setHeroHeight(window.innerHeight);
+    const handleResize = () => setHeroHeight(window.innerHeight);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Compute opacity: 0 at top → 0.95 when hero scrolls out
+  const scrollProgress = Math.min(scrollY / heroHeight, 1);
+  const bgOpacity = scrollProgress * 0.95;
+  const showBorder = scrollProgress > 0.05;
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -29,11 +42,15 @@ export default function Navbar() {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-[var(--z-navbar)] transition-all duration-300 ${
-          scrolled
-            ? "glass border-b border-white/[0.08] shadow-lg"
-            : "bg-transparent border-b border-transparent"
+        className={`fixed top-0 left-0 right-0 z-[var(--z-navbar)] ${
+          showBorder
+            ? "border-b border-white/[0.08] shadow-lg"
+            : "border-b border-transparent"
         }`}
+        style={{
+          position: "fixed",
+          background: `rgba(15, 15, 26, ${bgOpacity})`,
+        }}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
           {/* Logo */}

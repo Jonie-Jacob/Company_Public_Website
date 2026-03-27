@@ -4,6 +4,7 @@ import { useRef, useEffect, useCallback } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useLowEndDevice } from "@/hooks/useLowEndDevice";
 
 /* ─── Particle canvas ─── */
 
@@ -22,20 +23,23 @@ function createParticles(w: number, h: number, count: number): Particle[] {
     x: Math.random() * w,
     y: Math.random() * h,
     r: Math.random() * 2 + 0.5,
-    vx: (Math.random() - 0.5) * 0.3,
-    vy: (Math.random() - 0.5) * 0.3,
-    alpha: Math.random() * 0.6 + 0.2,
+    vx: (Math.random() - 0.5) * 1.2,
+    vy: (Math.random() - 0.5) * 1.2,
+    alpha: Math.random() * 0.7 + 0.3,
     pulse: Math.random() * Math.PI * 2,
   }));
 }
 
-function ParticleCanvas() {
+function ParticleCanvas({ lite = false }: { lite?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particles = useRef<Particle[]>([]);
   const animId = useRef(0);
+  const isVisible = useRef(true);
   const reducedMotion = useReducedMotion();
 
   const draw = useCallback(() => {
+    if (!isVisible.current) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -49,7 +53,7 @@ function ParticleCanvas() {
       if (!reducedMotion) {
         p.x += p.vx;
         p.y += p.vy;
-        p.pulse += 0.015;
+        p.pulse += lite ? 0.015 : 0.03;
         if (p.x < 0) p.x = w;
         if (p.x > w) p.x = 0;
         if (p.y < 0) p.y = h;
@@ -63,15 +67,17 @@ function ParticleCanvas() {
       ctx.fillStyle = `rgba(168, 85, 247, ${a})`;
       ctx.fill();
 
-      // glow
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(168, 85, 247, ${a * 0.15})`;
-      ctx.fill();
+      // glow (skip on lite mode)
+      if (!lite) {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 4, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(168, 85, 247, ${a * 0.25})`;
+        ctx.fill();
+      }
     }
 
     animId.current = requestAnimationFrame(draw);
-  }, [reducedMotion]);
+  }, [reducedMotion, lite]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -84,8 +90,20 @@ function ParticleCanvas() {
       canvas.height = rect.height * dpr;
       const ctx = canvas.getContext("2d");
       if (ctx) ctx.scale(dpr, dpr);
-      particles.current = createParticles(rect.width, rect.height, 80);
+      particles.current = createParticles(rect.width, rect.height, lite ? 30 : 120);
     };
+
+    // Pause animation when canvas scrolls off-screen
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisible.current = entry.isIntersecting;
+        if (entry.isIntersecting) {
+          animId.current = requestAnimationFrame(draw);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
 
     resize();
     animId.current = requestAnimationFrame(draw);
@@ -94,8 +112,9 @@ function ParticleCanvas() {
     return () => {
       cancelAnimationFrame(animId.current);
       window.removeEventListener("resize", resize);
+      observer.disconnect();
     };
-  }, [draw]);
+  }, [draw, lite]);
 
   return (
     <canvas
@@ -113,8 +132,9 @@ function ZWatermark() {
     <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
       <span
         className="text-[28rem] md:text-[36rem] font-bold font-[family-name:var(--font-heading)] leading-none
-                   bg-gradient-to-br from-purple/8 to-ceylon-blue/5 bg-clip-text text-transparent
-                   drop-shadow-[0_0_80px_rgba(168,85,247,0.08)]"
+                   bg-gradient-to-br from-purple/20 to-ceylon-blue/15 bg-clip-text text-transparent
+                   drop-shadow-[0_0_120px_rgba(168,85,247,0.25)]"
+        style={{ WebkitTextStroke: '2px rgba(168, 85, 247, 0.12)' }}
         aria-hidden="true"
       >
         Z
@@ -128,27 +148,36 @@ function ZWatermark() {
 function ScrollIndicator() {
   return (
     <motion.div
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ delay: 2, duration: 0.8 }}
     >
-      <span className="text-xs text-text-muted tracking-widest uppercase">Scroll</span>
-      <motion.svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="text-purple-light"
-        animate={{ y: [0, 6, 0] }}
-        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+      <span className="text-sm text-champagne/70 tracking-[0.2em] uppercase font-medium">Scroll</span>
+      <motion.div
+        className="relative"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
       >
-        <path d="M6 9l6 6 6-6" />
-      </motion.svg>
+        {/* Glow behind chevron */}
+        <div
+          className="absolute inset-0 w-10 h-10 rounded-full bg-purple/30 blur-lg -translate-x-1 -translate-y-1"
+          aria-hidden="true"
+        />
+        <svg
+          width="36"
+          height="36"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="text-champagne drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
+        >
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </motion.div>
     </motion.div>
   );
 }
@@ -158,6 +187,8 @@ function ScrollIndicator() {
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const reducedMotion = useReducedMotion();
+  const lowEnd = useLowEndDevice();
+  const lite = reducedMotion || lowEnd;
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -203,7 +234,7 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden -mt-[72px] pt-[72px]"
+      className="relative h-screen flex items-center justify-center overflow-hidden -mt-[72px]"
     >
       {/* ── Gradient background ── */}
       <div
@@ -211,31 +242,54 @@ export default function HeroSection() {
         aria-hidden="true"
       />
 
-      {/* ── Subtle radial glow accents ── */}
-      <div
-        className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full
-                   bg-purple/15 blur-[120px] pointer-events-none"
+      {/* ── Orbs — animated radial glow accents ── */}
+      <motion.div
+        className="absolute top-[15%] left-[10%] w-[700px] h-[700px] rounded-full
+                   bg-purple/30 blur-[100px] pointer-events-none"
+        animate={lite ? undefined : {
+          x: [0, 40, -20, 0],
+          y: [0, -30, 20, 0],
+          scale: [1, 1.1, 0.95, 1],
+        }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
         aria-hidden="true"
       />
-      <div
-        className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full
-                   bg-ceylon-blue/10 blur-[100px] pointer-events-none"
+      <motion.div
+        className="absolute bottom-[10%] right-[5%] w-[600px] h-[600px] rounded-full
+                   bg-ceylon-blue/25 blur-[90px] pointer-events-none"
+        animate={lite ? undefined : {
+          x: [0, -30, 25, 0],
+          y: [0, 25, -35, 0],
+          scale: [1, 0.95, 1.1, 1],
+        }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+        aria-hidden="true"
+      />
+      <motion.div
+        className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2
+                   w-[500px] h-[500px] rounded-full
+                   bg-purple/15 blur-[80px] pointer-events-none"
+        animate={lite ? undefined : {
+          scale: [1, 1.2, 1],
+          opacity: [0.5, 0.8, 0.5],
+        }}
+        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         aria-hidden="true"
       />
 
       {/* ── Particles (parallax layer) ── */}
       <motion.div
         className="absolute inset-0"
-        style={reducedMotion ? undefined : { y: particleY }}
+        style={lite ? undefined : { y: particleY }}
         aria-hidden="true"
       >
-        <ParticleCanvas />
+        <ParticleCanvas lite={lite} />
       </motion.div>
 
       {/* ── Z watermark (parallax layer) ── */}
       <motion.div
         className="absolute inset-0"
-        style={reducedMotion ? undefined : { y: watermarkY }}
+        style={lite ? undefined : { y: watermarkY }}
         aria-hidden="true"
       >
         <ZWatermark />
@@ -244,7 +298,7 @@ export default function HeroSection() {
       {/* ── Content ── */}
       <motion.div
         className="relative z-10 flex flex-col items-center text-center px-6 max-w-4xl mx-auto"
-        style={reducedMotion ? undefined : { y: contentY, opacity: contentOpacity }}
+        style={lite ? undefined : { y: contentY, opacity: contentOpacity }}
       >
         {/* Glassmorphism overlay behind text */}
         <div
@@ -258,7 +312,7 @@ export default function HeroSection() {
           className="relative gradient-text-bright text-4xl sm:text-5xl md:text-6xl lg:text-7xl
                      font-bold font-[family-name:var(--font-heading)]
                      leading-tight tracking-tight mb-6"
-          variants={reducedMotion ? undefined : headlineVariants}
+          variants={lite ? undefined : headlineVariants}
           initial="hidden"
           animate="visible"
         >
@@ -270,7 +324,7 @@ export default function HeroSection() {
         <motion.p
           className="relative text-base sm:text-lg md:text-xl text-text-secondary
                      max-w-2xl leading-relaxed mb-10"
-          variants={reducedMotion ? undefined : subheadlineVariants}
+          variants={lite ? undefined : subheadlineVariants}
           initial="hidden"
           animate="visible"
         >
@@ -280,7 +334,7 @@ export default function HeroSection() {
 
         <motion.div
           className="relative flex flex-col sm:flex-row items-center gap-4"
-          variants={reducedMotion ? undefined : ctaVariants}
+          variants={lite ? undefined : ctaVariants}
           initial="hidden"
           animate="visible"
         >
@@ -321,6 +375,13 @@ export default function HeroSection() {
 
       {/* ── Scroll indicator ── */}
       <ScrollIndicator />
+
+      {/* ── Bottom gradient fade for smooth transition ── */}
+      <div
+        className="absolute bottom-0 left-0 right-0 h-32
+                   bg-gradient-to-t from-near-black to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
     </section>
   );
 }
